@@ -28,10 +28,10 @@ class SMPBuilder(object):
         self.synth_smp = self.baseline
         self.synth_smp[self.t_0:] = self.synth_smp[self.t_0:] + self.pulse
 
-    def _generate_baseline(self, start_mean=0.06, start_var=0.077):
-        """Generates a base timeline with proper length, appropriate mean and variance."""
-        # assume counts are randomly distributed with small mean and variance
-        self.baseline = (np.random.random(self.capture_len) * start_var) + start_mean
+    def _generate_baseline(self, start_mean=0.06, start_std=0.077):
+        """Generates a base timeline with proper length, appropriate mean and standard deviation."""
+        # assume counts are randomly distributed with small mean and standard deviation
+        self.baseline = (np.random.random(self.capture_len) * start_std) + start_mean
 
     def write_csv(self, csv_name):
         """Writes the synthetic SMP to a CSV."""
