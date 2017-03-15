@@ -9,11 +9,10 @@ import scipy.special as sps
 class SMPBuilder(object):
     """Simple class that creates a synthetic SMP using input from the command line."""
 
-    def __init__(self, model_parameters, start_time, vector_length, out_csv):
+    def __init__(self, model_parameters, start_time, vector_length):
         self.alpha, self.beta, self.a_0 = model_parameters
         self.t_0 = start_time
         self.capture_len = vector_length
-        self.csv_name = out_csv
         self.pulse_len = self.capture_len - self.t_0
         self._generate_baseline()
         self._generate_pulse()
@@ -34,10 +33,10 @@ class SMPBuilder(object):
         # assume counts are randomly distributed with small mean and variance
         self.baseline = (np.random.random(self.capture_len) * start_var) + start_mean
 
-    def write_csv(self):
+    def write_csv(self, csv_name):
         """Writes the synthetic SMP to a CSV."""
         # write it all out as a CSV.
-        with open(self.csv_name, 'w') as csvfile:
+        with open(csv_name, 'w') as csvfile:
             csv_writer = csv.writer(csvfile, delimiter=',')
             py_floats = self.synth_smp.tolist()
             for time, y_val in enumerate(py_floats):
@@ -62,13 +61,13 @@ def get_arguments():
 def main():
     """Generates a synthetic SMP, plots it, and writes it to CSV."""
     model_params, start_time, vector_length, out_csv = get_arguments()
-    smp = SMPBuilder(model_params, start_time, vector_length, out_csv)
+    smp = SMPBuilder(model_params, start_time, vector_length)
 
     # plot what you've come up with
     plt.plot(smp.synth_smp)
     plt.show()
 
-    smp.write_csv()
+    smp.write_csv(out_csv)
 
 
 if __name__ == "__main__":
