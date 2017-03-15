@@ -24,7 +24,8 @@ class SMPBuilder(object):
         x_vals = np.linspace(.00001, 1.3, self.pulse_len)
         self.pulse = (x_vals ** (shape - 1) * (np.exp(-x_vals / scale)) /
                       (sps.gamma(shape) * scale ** shape))
-        self.pulse[np.where(self.pulse > 1)] = 1
+        scale_factor = np.max(self.pulse)
+        self.pulse = self.pulse / scale_factor
         self.synth_smp = self.baseline
         self.synth_smp[self.t_0:] = self.synth_smp[self.t_0:] + self.pulse
 
